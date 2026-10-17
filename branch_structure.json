@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "fix/issue-1366-fe-125-reconnectionbanner-and",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "fix/issue-1366-fe-125-reconnectionbanner-and": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "fix/issue-1366-fe-125-reconnectionbanner-and",
+    "origin"
+  ]
+}
