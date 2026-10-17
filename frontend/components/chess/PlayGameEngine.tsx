@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { Chess } from "chess.js";
 import { useParams, useRouter } from "next/navigation";
 import { useChessSocket } from "@/hook/useChessSocket";
-import { FaUser, FaClock } from "react-icons/fa";
+import { FaUser, FaClock, FaSignal } from "react-icons/fa";
 import { Web3StatusBar } from "@/components/Web3StatusBar";
 import { useCheatDetection } from "@/hook/useCheatDetection";
 import { GameResultOverlay } from "@/components/GameResultOverlay";
@@ -20,8 +20,8 @@ import BlindfoldToggle from "@/components/chess/BlindfoldToggle";
 import { useSpeechSynthesis } from "@/hook/useSpeechSynthesis";
 import { useGamePreferences } from "@/context/GamePreferencesContext";
 import AICompanionHUD from "@/components/chess/AICompanionHUD";
-import { ReconnectionBanner } from "@/components/ReconnectionBanner";
 import { ConnectionStatusIndicator } from "@/components/chess/ConnectionStatusIndicator";
+import { ReconnectionBanner } from "@/components/ReconnectionBanner";
 
 const ChessboardComponent = dynamic(
   () => import("@/components/chess/ChessboardComponent"),
@@ -376,6 +376,7 @@ export default function PlayGameEngine({ fen }: { fen?: string }) {
         </div>
 
         <ReconnectionBanner status={socketStatus} onReconnect={reconnect} />
+
         <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
           <div
             className="w-full max-w-[600px] min-w-0 px-2 sm:px-0"
@@ -495,7 +496,9 @@ export default function PlayGameEngine({ fen }: { fen?: string }) {
               >
                 Resign
               </button>
-              <ConnectionStatusIndicator status={socketStatus} />
+              <div className="flex items-center gap-1.5 px-2 shrink-0">
+                <ConnectionStatusIndicator status={socketStatus} />
+              </div>
             </div>
           </div>
 
@@ -509,7 +512,9 @@ export default function PlayGameEngine({ fen }: { fen?: string }) {
                 <h3 className="text-sm font-semibold text-gray-300">
                   Game Status
                 </h3>
-                <ConnectionStatusIndicator status={socketStatus} />
+                <div className="hidden lg:flex items-center gap-1.5">
+                  <ConnectionStatusIndicator status={socketStatus} />
+                </div>
               </div>
 
               {gameStatus !== "playing" && (
@@ -629,6 +634,8 @@ export default function PlayGameEngine({ fen }: { fen?: string }) {
       >
         {announcement}
       </div>
+
+      <ReconnectionBanner status={socketStatus} onReconnect={reconnect} />
 
       {overlayResult && (
         <GameResultOverlay

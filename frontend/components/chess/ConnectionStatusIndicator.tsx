@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { EnhancedSocketStatus } from "@/hook/useEnhancedChessSocket";
 
 interface ConnectionStatusIndicatorProps {
@@ -12,8 +14,21 @@ export function ConnectionStatusIndicator({
   status,
   reconnectAttempts,
   latency,
-  compact = false,
 }: ConnectionStatusIndicatorProps) {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    if (status === "connected" && latency === null && reconnectAttempts === 0) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [status, latency, reconnectAttempts]);
+
+  if (!isVisible) {
+    return null;
+  }
+
   const getStatusColor = () => {
     switch (status) {
       case "connected":
@@ -64,13 +79,7 @@ export function ConnectionStatusIndicator({
   };
 
   return (
-    <div
-      className={
-        compact
-          ? "flex items-center gap-2"
-          : "flex items-center gap-3 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg"
-      }
-    >
+    <div className="flex items-center gap-3 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
       {/* Status Indicator */}
       <div className="flex items-center gap-2">
         <div className={`w-2.5 h-2.5 rounded-full ${getStatusColor()}`} />
@@ -78,7 +87,7 @@ export function ConnectionStatusIndicator({
       </div>
 
       {/* Latency */}
-      {latency !== null && !compact && (
+      {latency !== null && (
         <div className="flex items-center gap-2 ml-4 pl-4 border-l border-gray-700">
           <span className="text-xs text-gray-400">Latency:</span>
           <span className={`text-xs font-mono font-semibold ${getLatencyColor()}`}>
@@ -91,7 +100,7 @@ export function ConnectionStatusIndicator({
       )}
 
       {/* Reconnection Attempts */}
-      {reconnectAttempts > 0 && !compact && (
+      {reconnectAttempts > 0 && (
         <div className="flex items-center gap-2 ml-4 pl-4 border-l border-gray-700">
           <span className="text-xs text-gray-400">Reconnect attempts:</span>
           <span className="text-xs font-semibold text-yellow-400">
